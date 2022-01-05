@@ -1,4 +1,6 @@
 from flask import Flask
+from models import db
+from flask_migrate import Migrate
 
 from hbb.routes import hbb
 from api.routes import api
@@ -14,10 +16,13 @@ app.register_blueprint(hbb)
 app.register_blueprint(api)
 app.register_blueprint(admin)
 
+db.init_app(app)
+migrate = Migrate(app, db)
 
-# @app.before_first_request
-# def create_table():
-#     db.create_all()
+
+@app.before_first_request
+def create_table():
+    db.create_all()
 
 
 @app.route('/')
