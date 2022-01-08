@@ -17,12 +17,21 @@ class AppsModel(db.Model):
     rating = db.Column(db.Integer, default=0)                        # Rating of the application
     downloads = db.Column(db.Integer, default=0)                     # Number of downloads
     category = db.Column(db.String, nullable=False)                  # Category of the application
-    version = db.Column(db.String, nullable=False)                   # Version of the application
-    title_id = db.Column(db.String, nullable=False)                  # Title ID of the application
+    version = db.Column(db.Integer, default=0)                       # Version of the application
     theme = db.Column(db.Boolean, default=False)                     # Theme of the application
+    title_ids = relationship("TitleIDsModel", back_populates="application")
     meta_data = relationship("MetadataModel", back_populates="application", uselist=False)
     author = relationship("AuthorModel", back_populates="application", uselist=False)
     analytics = relationship("AnalyticsModel", back_populates="application")
+
+
+class TitleIDsModel(db.Model):
+    __tablename__ = 'title_ids'
+
+    application_id = db.Column(db.Integer, ForeignKey('application.id'), primary_key=True)
+    sd_title = db.Column(db.String, nullable=False)
+    nand_title = db.Column(db.String, nullable=False)
+    forwarder_title = db.Column(db.String, nullable=False)
 
 
 class MetadataModel(db.Model):
