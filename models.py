@@ -19,9 +19,10 @@ class AppsModel(db.Model):
     category = db.Column(db.String, nullable=False)                  # Category of the application
     version = db.Column(db.Integer, default=0)                       # Version of the application
     theme = db.Column(db.Boolean, default=False)                     # Theme of the application
-    title_ids = relationship("TitleIDsModel", back_populates="application")
+    title_ids = relationship("TitleIDsModel", back_populates="application", uselist=False)
     meta_data = relationship("MetadataModel", back_populates="application", uselist=False)
-    author = relationship("AuthorModel", back_populates="application", uselist=False)
+    author = relationship("AuthorModel", backref="application", uselist=False)
+    author_id = db.Column(db.Integer, ForeignKey('author.id'))
     analytics = relationship("AnalyticsModel", back_populates="application")
 
 
@@ -29,6 +30,7 @@ class TitleIDsModel(db.Model):
     __tablename__ = 'title_ids'
 
     application_id = db.Column(db.Integer, ForeignKey('application.id'), primary_key=True)
+    application = relationship("AppsModel", back_populates="title_ids")
     sd_title = db.Column(db.String, nullable=False)
     nand_title = db.Column(db.String, nullable=False)
     forwarder_title = db.Column(db.String, nullable=False)
@@ -38,7 +40,7 @@ class MetadataModel(db.Model):
     __tablename__ = 'metadata'
 
     application_id = db.Column(db.Integer, ForeignKey('application.id'), primary_key=True)   # Application ID
-    application = relationship("AppsModel", back_populates="metadata")                       # Application
+    application = relationship("AppsModel", back_populates="meta_data")                      # Application
     display_name = db.Column(db.String, nullable=False)                                      # Display name of the application
     display_version = db.Column(db.String, nullable=False)                                   # Display version of the application
     short_description = db.Column(db.String, nullable=True)                                  # Short description of the application
@@ -50,19 +52,23 @@ class MetadataModel(db.Model):
 class AuthorModel(db.Model):
     __tablename__ = 'author'
 
-    id = db.Column(db.Integer, primary_key=True)                         # Numeric author ID
-    application = relationship("AppsModel", back_populates="author")     # Application
-    display_name = db.Column(db.String, nullable=False)                  # Display name of the author
-    description = db.Column(db.String, nullable=True)                    # Description of the author
-    url = db.Column(db.String, nullable=True)                            # URL of the author
+    id = db.Column(db.Integer, primary_key=True)                                  # Numeric author ID
+    display_name = db.Column(db.String, nullable=False)                           # Display name of the author
+    description = db.Column(db.String, nullable=True)                             # Description of the author
+    url = db.Column(db.String, nullable=True)                                     # URL of the author
 
 
 class AnalyticsModel(db.Model):
     __tablename__ = 'analytics'
 
-    id = db.Column(db.Integer, primary_key=True)                         # Numeric analytic point ID
-    application = relationship("AppsModel", back_populates="analytics")  # Application
-    date = db.Column(db.DateTime, default=datetime.utcnow)               # Date of the analytic point
-    type = db.Column(db.String, nullable=False)                          # Type of the analytic point
-    value = db.Column(db.Integer, nullable=False)                        # Value of the analytic point
+    id = db.Column(db.Integer, primary_key=True)                          # Numeric analytic point ID
+    application_id = db.Column(db.Integer, ForeignKey('application.id'))  # Application ID
+    application = relationship("AppsModel", back_populates="analytics")   # Application
+    date = db.Column(db.DateTime, default=datetime.utcnow)                # Date of the analytic point
+    type = db.Column(db.String, nullable=False)                           # Type of the analytic point
+    value = db.Column(db.Integer, nullable=False)                         # Value of the analytic point
 
+
+@login.user_loader
+def load_user(id):
+    return UserModel.query.get(int(id))
