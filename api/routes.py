@@ -1,7 +1,7 @@
 from typing import Dict
 
 from api.apps import app_to_dict
-from models import AppsModel, AuthorModel, MetadataModel
+from models import AppsModel, AuthorModel
 from repos import REPOS, valid_repo
 from flask import Blueprint, abort, jsonify, request
 
@@ -42,7 +42,6 @@ def retrieve_package(repo):
     statement = AppsModel.query
 
     # Common query parameters
-    query = request.args.get("query")
     coder = request.args.get("coder")
     category = request.args.get("category")
     package = request.args.get("package")
@@ -59,11 +58,6 @@ def retrieve_package(repo):
         single_package = True
 
         statement = statement.where(AppsModel.slug == package).limit(1)
-    elif query:
-        # We want as many packages as possible.
-        single_package = False
-
-        statement = statement.filter(MetadataModel.display_name.like(query))
 
     # Query!
     queried_apps: [AppsModel] = statement.all()
