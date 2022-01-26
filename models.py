@@ -67,8 +67,3 @@ class AnalyticsModel(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)                # Date of the analytic point
     type = db.Column(db.String, nullable=False)                           # Type of the analytic point
     value = db.Column(db.Integer, nullable=False)                         # Value of the analytic point
-
-
-@login.user_loader
-def load_user(id):
-    return UserModel.query.get(int(id))
