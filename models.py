@@ -47,6 +47,7 @@ class MetadataModel(db.Model):
     long_description = db.Column(db.String, nullable=True)                                   # Long description of the application
     contributors = db.Column(db.String, nullable=True)                                       # Contributors of the application
     file_uuid = db.Column(db.String, nullable=True)                                          # File UUID of the application
+    controllers = db.Column(db.String, nullable=True)                                        # Controllers used by the title
 
 
 class AuthorModel(db.Model):

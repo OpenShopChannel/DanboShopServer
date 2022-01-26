@@ -24,3 +24,8 @@ REPOS: Dict[str, Repo] = {
         host="hbb3.oscwii.org",
     ),
 }
+
+
+def valid_repo(repo: str) -> bool:
+    """Returns whether the given repo is defined in our list."""
+    return repo in REPOS
