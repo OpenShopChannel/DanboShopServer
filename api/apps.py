@@ -1,7 +1,5 @@
 from typing import Dict, Union
 
-from flask import request
-
 from models import AppsModel
 
 
@@ -42,8 +40,6 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
 
 def url_for(app: AppsModel, file_type: str) -> str:
     """Retrieves a URL for the given file type."""
-    repo = request.view_args["repo"]
-
     if file_type == "zips":
         extension = "zip"
     elif file_type == "icons":
