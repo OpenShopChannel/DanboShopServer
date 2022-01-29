@@ -20,9 +20,6 @@ class TitlesExhaustedError(Exception):
 
 def get_char(index: int) -> str:
     """Returns the character for the given index. If zero, assumes A."""
-    if index == 0:
-        index = 1
-
     return CHAR_RANGE[index-1]
 
 
@@ -43,16 +40,17 @@ def generate_title_id(title_type: TitleType, amount: int) -> str:
         raise TitlesExhaustedError
 
     # We can determine the amount of characters by dividing
-    # by our length exponentially. We only need to do this three times.
+    # by our length exponentially.
     # For example, we start by dividing by 3844 (62 ** 2) in order
     # to determine the iteration for our third character.
-    # We then divide by 62 (62 ** 1). Lastly, we finish
-    # with our remainder alone - the last character's index.
+    # We then divide by 62 (62 ** 1).
+    # Lastly, we divide 1 with our remainder alone,
+    # determining the last character's index.
     for offset in reversed(range(3)):
         index = amount // (RANGE_LENGTH ** offset)
         if index:
             # Use the remainder of this operation for the next amount.
-            amount = index % (RANGE_LENGTH ** offset)
+            amount = amount % (RANGE_LENGTH ** offset)
 
         # Add this character's index to our title ID.
         title_id += get_char(index)
