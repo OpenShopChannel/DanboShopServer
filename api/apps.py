@@ -28,11 +28,11 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "rating": "",
         "release_date": int(app.date_added.timestamp()),
         "short_description": app.meta_data.short_description,
-        # "title_ids": {
-        #     "sd_title": app.title_ids.sd_title,
-        #     "nand_title": app.title_ids.nand_title,
-        #     "forwarder_title": app.title_ids.forwarder_title,
-        # },
+        "title_ids": {
+            "sd_title": app.title_ids.sd_title,
+            "nand_title": app.title_ids.nand_title,
+            "forwarder_title": app.title_ids.forwarder_title,
+        },
         "updated": updated_date,
         "version": app.meta_data.display_version,
         "zip_size": app.meta_data.file.zip_size,
