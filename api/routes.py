@@ -1,8 +1,7 @@
 from typing import Dict
 
 from api.apps import app_to_dict
-from models import AppsModel, AuthorModel
-from repos import REPOS, valid_repo
+from models import AppsModel, AuthorModel, ReposModel
 from flask import Blueprint, abort, jsonify, request
 
 api = Blueprint('api', __name__, template_folder='templates')
@@ -10,14 +9,16 @@ api = Blueprint('api', __name__, template_folder='templates')
 
 @api.get("/v2/hosts")
 def retrieve_hosts():
+    repos: [ReposModel] = ReposModel.query.all()
+
     repo_names: [str] = []
     repositories: Dict[str, Dict] = {}
 
-    for repo_id, repo in REPOS.items():
+    for repo in repos:
         # Keep track of this repo's name.
-        repo_names.append(repo_id)
+        repo_names.append(repo.id)
 
-        repositories[repo_id] = {
+        repositories[repo.id] = {
             "description": repo.description,
             "host": repo.host,
             "name": repo.name,
@@ -31,15 +32,11 @@ def retrieve_hosts():
 
 @api.get("/v2/<repo>/packages")
 def retrieve_package(repo):
-    # Ensure this is a valid repo.
-    if not valid_repo(repo):
-        abort(404)
-
     single_package = False
 
     # Check whether we are querying a single app,
     # a category, a specific author, or all apps.
-    statement = AppsModel.query
+    statement = AppsModel.query.where(AppsModel.repo_id == repo)
 
     # Common query parameters
     coder = request.args.get("coder")

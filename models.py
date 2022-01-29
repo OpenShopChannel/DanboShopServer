@@ -10,20 +10,22 @@ db = SQLAlchemy()
 class AppsModel(db.Model):
     __tablename__ = 'application'
 
-    id = db.Column(db.Integer, primary_key=True)                     # Numeric application ID
-    slug = db.Column(db.String, unique=True, nullable=False)         # Unique slug for the application
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)     # Date the application was added
-    date_updated = db.Column(db.DateTime, default=datetime.utcnow)   # Date the application was updated
-    rating = db.Column(db.Integer, default=0)                        # Rating of the application
-    downloads = db.Column(db.Integer, default=0)                     # Number of downloads
-    category = db.Column(db.String, nullable=False)                  # Category of the application
-    version = db.Column(db.Integer, default=0)                       # Version of the application
-    theme = db.Column(db.Boolean, default=False)                     # Theme of the application
+    id = db.Column(db.Integer, primary_key=True)                         # Numeric application ID
+    slug = db.Column(db.String, unique=True, nullable=False)             # Unique slug for the application
+    repo_id = db.Column(db.Integer, ForeignKey('repos.id'), index=True)  # Repo this application is in
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)         # Date the application was added
+    date_updated = db.Column(db.DateTime, default=datetime.utcnow)       # Date the application was updated
+    rating = db.Column(db.Integer, default=0)                            # Rating of the application
+    downloads = db.Column(db.Integer, default=0)                         # Number of downloads
+    category = db.Column(db.String, nullable=False)                      # Category of the application
+    version = db.Column(db.Integer, default=0)                           # Version of the application
+    theme = db.Column(db.Boolean, default=False)                         # Theme of the application
     title_ids = relationship("TitleIDsModel", back_populates="application", uselist=False)
     meta_data = relationship("MetadataModel", back_populates="application", uselist=False)
     author = relationship("AuthorModel", backref="application", uselist=False)
     author_id = db.Column(db.Integer, ForeignKey('author.id'))
     analytics = relationship("AnalyticsModel", back_populates="application")
+    repo = relationship("ReposModel", back_populates="application")
 
 
 class TitleIDsModel(db.Model):
@@ -47,7 +49,7 @@ class MetadataModel(db.Model):
     long_description = db.Column(db.String, nullable=True)                                   # Long description of the application
     contributors = db.Column(db.String, nullable=True)                                       # Contributors of the application
     file_uuid = db.Column(db.String, nullable=True, unique=True)                             # File UUID of the application
-    file = relationship("FileStatsModel", back_populates="meta_data", uselist=False)        # File statistics
+    file = relationship("FileStatsModel", back_populates="meta_data", uselist=False)         # File statistics
     controllers = db.Column(db.String, nullable=True)                                        # Controllers used by the title
 
 
@@ -78,3 +80,13 @@ class FileStatsModel(db.Model):
     meta_data = relationship("MetadataModel", back_populates="file")
     extracted_size = db.Column(db.Integer, default=0)
     zip_size = db.Column(db.Integer, default=0)
+
+
+class ReposModel(db.Model):
+    __tablename__ = 'repos'
+
+    id = db.Column(db.String, primary_key=True)
+    application = relationship("AppsModel", back_populates="repo")
+    description = db.Column(db.String)
+    name = db.Column(db.String)
+    host = db.Column(db.String)

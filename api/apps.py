@@ -21,7 +21,7 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "downloads": 0,
         "extra_directories": [],
         "extracted": app.meta_data.file.extracted_size,
-        "icon_url": url_for(app.meta_data.file_uuid, "icons"),
+        "icon_url": url_for(app, "icons"),
         "internal_name": app.slug,
         "long_description": app.meta_data.long_description,
         "package_type": "dol",
@@ -36,13 +36,12 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "updated": updated_date,
         "version": app.meta_data.display_version,
         "zip_size": app.meta_data.file.zip_size,
-        "zip_url": url_for(app.meta_data.file_uuid, "zips"),
+        "zip_url": url_for(app, "zips"),
     }
 
 
-def url_for(uuid_name: str, file_type: str) -> str:
-    """Retrieves a URL. It's assumed that the caller has repo as a path parameter."""
-    hostname = request.host
+def url_for(app: AppsModel, file_type: str) -> str:
+    """Retrieves a URL for the given file type."""
     repo = request.view_args["repo"]
 
     if file_type == "zips":
@@ -53,5 +52,8 @@ def url_for(uuid_name: str, file_type: str) -> str:
         # This if statement should not be exhausted.
         extension = "???"
 
+    hostname = app.repo.host
+    repo = app.repo.id
+    uuid_name = app.meta_data.file_uuid
     return f"https://{hostname}/{repo}/{file_type}/{uuid_name}.{extension}"
 
