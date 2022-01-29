@@ -46,7 +46,8 @@ class MetadataModel(db.Model):
     short_description = db.Column(db.String, nullable=True)                                  # Short description of the application
     long_description = db.Column(db.String, nullable=True)                                   # Long description of the application
     contributors = db.Column(db.String, nullable=True)                                       # Contributors of the application
-    file_uuid = db.Column(db.String, nullable=True)                                          # File UUID of the application
+    file_uuid = db.Column(db.String, nullable=True, unique=True)                             # File UUID of the application
+    file = relationship("FileStatsModel", back_populates="meta_data", uselist=False)        # File statistics
     controllers = db.Column(db.String, nullable=True)                                        # Controllers used by the title
 
 
@@ -68,3 +69,12 @@ class AnalyticsModel(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)                # Date of the analytic point
     type = db.Column(db.String, nullable=False)                           # Type of the analytic point
     value = db.Column(db.Integer, nullable=False)                         # Value of the analytic point
+
+
+class FileStatsModel(db.Model):
+    __tablename__ = 'file_stats'
+
+    id = db.Column(db.String, ForeignKey('metadata.file_uuid'), primary_key=True)
+    meta_data = relationship("MetadataModel", back_populates="file")
+    extracted_size = db.Column(db.Integer, default=0)
+    zip_size = db.Column(db.Integer, default=0)
