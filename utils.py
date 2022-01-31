@@ -1,3 +1,4 @@
+import hashlib
 import os
 from enum import Enum
 
@@ -19,7 +20,12 @@ class FileTypes(Enum):
 
 def storage_dir(storage_type: StorageTypes) -> str:
     """Returns a path for a given subpath in the configured storage directory."""
-    return f"{config.FILE_STORAGE_PATH}/{str(storage_type)}"
+    return f"{config.FILE_STORAGE_PATH}/{storage_type.value}"
+
+
+def storage_path(storage_type: StorageTypes, dir_name: str) -> str:
+    """Returns a path for a directory within the given storage type."""
+    return f"{storage_dir(storage_type)}/{dir_name}"
 
 
 def file_path(file_name: str, file_type: FileTypes) -> str:
@@ -31,7 +37,7 @@ def file_path(file_name: str, file_type: FileTypes) -> str:
     else:
         raise ValueError
 
-    return storage_dir(storage_type) + "/" + file_name + "." + str(file_type)
+    return storage_dir(storage_type) + "/" + file_name + "." + file_type.value
 
 
 def create_storage_dirs():
@@ -39,3 +45,21 @@ def create_storage_dirs():
     for storage_type in StorageTypes:
         dir_path = storage_dir(storage_type)
         os.makedirs(dir_path, exist_ok=True)
+
+
+def md5sum_file(path: str) -> bytes:
+    """Returns the MD5 hash of a file."""
+    with open(path, 'rb') as file:
+        contents = file.read()
+        digest = hashlib.md5(contents).digest()
+
+    return digest
+
+
+def sha256sum_file(path: str) -> bytes:
+    """Returns the SHA-256 hash of a file."""
+    with open(path, 'rb') as file:
+        contents = file.read()
+        digest = hashlib.sha256(contents).digest()
+
+    return digest

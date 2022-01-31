@@ -23,12 +23,25 @@ def get_char(index: int) -> str:
     return CHAR_RANGE[index-1]
 
 
+def get_title_category(title_type: TitleType) -> str:
+    """Returns the upper title category for the title ID.
+
+    At present, this assumes 00010001 for any non-SD title.
+    If the title is SD, it's assumed to be 00010008."""
+
+    if title_type == TitleType.SD:
+        return '00010008'
+    else:
+        return '00010001'
+
+
 def generate_title_id(title_type: TitleType, amount: int) -> str:
     """Generates a lower title ID.
 
     Given an iteration amount, increments from <type>AAA
     to that of the passed iteration. For example, with a title
     type of NAND and amount of 52, HAAA iter 52 is HAAz.
+    It then returns
     """
     type_byte: str = title_type.value
 
@@ -55,4 +68,14 @@ def generate_title_id(title_type: TitleType, amount: int) -> str:
         # Add this character's index to our title ID.
         title_id += get_char(index)
 
-    return title_id
+    # Encode the title's characters to hexadecimal.
+    hex_title_id = bytes(title_id, 'ascii').hex()
+    return hex_title_id
+
+
+def get_title_id(title_type: TitleType, app_id: int) -> str:
+    """Returns a predictable title ID for an application type and ID."""
+
+    title_upper = get_title_category(title_type)
+    title_lower = generate_title_id(title_type, app_id)
+    return title_upper + title_lower
