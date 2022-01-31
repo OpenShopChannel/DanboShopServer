@@ -12,7 +12,7 @@ class AppsModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)                         # Numeric application ID
     slug = db.Column(db.String, unique=True, nullable=False)             # Unique slug for the application
-    repo_id = db.Column(db.Integer, ForeignKey('repos.id'), index=True)  # Repo this application is in
+    repo_id = db.Column(db.String, ForeignKey('repos.id'), index=True)   # Repo this application is in
     date_added = db.Column(db.DateTime, default=datetime.utcnow)         # Date the application was added
     date_updated = db.Column(db.DateTime, default=datetime.utcnow)       # Date the application was updated
     rating = db.Column(db.Integer, default=0)                            # Rating of the application
@@ -80,6 +80,8 @@ class FileStatsModel(db.Model):
     meta_data = relationship("MetadataModel", back_populates="file")
     extracted_size = db.Column(db.Integer, default=0)
     zip_size = db.Column(db.Integer, default=0)
+    md5 = db.Column(db.LargeBinary(length=16))
+    sha256 = db.Column(db.LargeBinary(length=32))
 
 
 class ReposModel(db.Model):
