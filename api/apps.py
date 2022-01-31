@@ -20,11 +20,15 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "downloads": 0,
         "extra_directories": [],
         "extracted": app.meta_data.file.extracted_size,
+        "hashes": {
+            "md5": app.meta_data.file.md5,
+            "sha256": app.meta_data.file.sha256,
+        },
         "icon_url": url_for(app, FileTypes.ICON),
         "internal_name": app.slug,
         "long_description": app.meta_data.long_description,
         "package_type": "dol",
-        "rating": "",
+        "rating": app.rating,
         "release_date": int(app.date_added.timestamp()),
         "short_description": app.meta_data.short_description,
         "title_ids": {

@@ -29,7 +29,7 @@ def import_for(repo: str):
 
         # Prepare to insert our application.
         date_added = date.fromtimestamp(app["release_date"])
-        if app["updated"] is not 0:
+        if app["updated"] != 0:
             date_updated = date.fromtimestamp(app["updated"])
         else:
             date_updated = date_added
@@ -86,8 +86,8 @@ def process_files(app: Dict) -> str:
     zip_path = download_zip(app["zip_url"], file_uuid)
 
     # Obtain hashes of our downloaded zip.
-    md5 = md5sum_file(zip_path)
-    sha256 = sha256sum_file(zip_path)
+    md5 = md5sum_file(zip_path).hex()
+    sha256 = sha256sum_file(zip_path).hex()
 
     # Extract the zip.
     extract_path = storage_path(StorageTypes.UNZIPPED, file_uuid)

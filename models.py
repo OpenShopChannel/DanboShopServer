@@ -80,8 +80,8 @@ class FileStatsModel(db.Model):
     meta_data = relationship("MetadataModel", back_populates="file")
     extracted_size = db.Column(db.Integer, default=0)
     zip_size = db.Column(db.Integer, default=0)
-    md5 = db.Column(db.LargeBinary(length=16))
-    sha256 = db.Column(db.LargeBinary(length=32))
+    md5 = db.Column(db.String)
+    sha256 = db.Column(db.String)
 
 
 class ReposModel(db.Model):
