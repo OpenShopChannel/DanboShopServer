@@ -1,6 +1,7 @@
 from typing import Dict, Union
 
 from models import AppsModel
+from utils import FileTypes
 
 
 def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
@@ -19,7 +20,7 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "downloads": 0,
         "extra_directories": [],
         "extracted": app.meta_data.file.extracted_size,
-        "icon_url": url_for(app, "icons"),
+        "icon_url": url_for(app, FileTypes.ICON),
         "internal_name": app.slug,
         "long_description": app.meta_data.long_description,
         "package_type": "dol",
@@ -34,19 +35,13 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "updated": updated_date,
         "version": app.meta_data.display_version,
         "zip_size": app.meta_data.file.zip_size,
-        "zip_url": url_for(app, "zips"),
+        "zip_url": url_for(app, FileTypes.ZIP),
     }
 
 
-def url_for(app: AppsModel, file_type: str) -> str:
+def url_for(app: AppsModel, file_type: FileTypes) -> str:
     """Retrieves a URL for the given file type."""
-    if file_type == "zips":
-        extension = "zip"
-    elif file_type == "icons":
-        extension = "png"
-    else:
-        # This if statement should not be exhausted.
-        extension = "???"
+    extension = str(file_type)
 
     hostname = app.repo.host
     repo = app.repo.id

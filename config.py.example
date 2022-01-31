@@ -1,2 +1,4 @@
 # Database URI
 SQLALCHEMY_DATABASE_URI = ""
+secret_key = ""
+FILE_STORAGE_PATH = "./storage"
