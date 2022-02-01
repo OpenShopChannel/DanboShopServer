@@ -42,12 +42,7 @@ def storage_type_for_file(file_type: FileTypes) -> StorageTypes:
 
 def file_path(file_name: str, file_type: FileTypes) -> str:
     """Returns a path for a file type within the given storage type."""
-    if file_type == FileTypes.ICON:
-        storage_type = StorageTypes.ICONS
-    elif file_type == FileTypes.ZIP:
-        storage_type = StorageTypes.ZIPPED
-    else:
-        raise ValueError
+    storage_type = storage_type_for_file(file_type)
 
     return storage_dir(storage_type) + "/" + file_name + "." + file_type.value
 

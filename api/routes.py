@@ -48,6 +48,7 @@ def retrieve_package(repo):
 
     if coder:
         statement = statement.where(AuthorModel.display_name == coder)
+        statement = statement.where(AppsModel.author_id == AuthorModel.id)
 
     # We should have a direct package name or a query, one or the other.
     if package:
