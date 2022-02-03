@@ -2,19 +2,49 @@ from flask import Blueprint, Response, stream_with_context, request
 from pip._vendor import requests
 
 from hbb.normalize import Normalize
-from models import ReposModel
+from models import ReposModel, AppsModel
 
 hbb = Blueprint('hbb', __name__, template_folder='templates')
 
 
-# Stub
 @hbb.route('/hbb/homebrew_browser/listv036.txt')
+@hbb.route('/hbb/listv036.txt')
 def apps_list():
     """
     Returns a list of all the apps in the homebrew browser list format.
     """
-    req = requests.get("https://hbb1.oscwii.org/hbb/listv036.txt", stream=True)
-    return Response(stream_with_context(req.iter_content(chunk_size=1024)), content_type=req.headers['content-type'])
+    content = Normalize()
+    content.add_line("Homebrew 2092896 v0.3.9e | - Updated with latest libogc which should correct network issues some users are experiencing")
+
+    # currently uses primary until different hostnames are handled
+
+    # order by category, so that all apps in the same category come one after the other
+    apps: [AppsModel] = AppsModel.query.where(AppsModel.repo_id == "primary").order_by(AppsModel.category).all()
+
+    current_category = apps[0].category
+    for app in apps:
+        # append "=Category=" if reached last item in category
+        if current_category != app.category:
+            content.add_line(f"={current_category.capitalize()}=")
+            current_category = app.category
+
+        # todo replace "59853 279424 dol" with correct values
+        content.add_line(f"{app.slug} {int(app.date_added.timestamp())} 59853 279424 dol {app.meta_data.file.zip_size} 0 0 ws  . .")
+        # Name
+        content.add_line(app.meta_data.display_name)
+        # Author
+        content.add_line(app.author.display_name)
+        # Version
+        content.add_line(app.meta_data.display_version)
+        # Extracted Size
+        content.add_line(str(app.meta_data.file.extracted_size))
+        # Short Description
+        content.add_line(app.meta_data.short_description)
+        # Long Description
+        content.add_line(app.meta_data.long_description)
+    content.add_line(f"={current_category.capitalize()}=")
+
+    return content.response
 
 
 # Stub
