@@ -1,6 +1,9 @@
 from flask import Blueprint, Response, stream_with_context, request
 from pip._vendor import requests
 
+from hbb.normalize import Normalize
+from models import ReposModel
+
 hbb = Blueprint('hbb', __name__, template_folder='templates')
 
 
@@ -31,16 +34,20 @@ def repo_list():
     """
     Returns a list of all the repos in the homebrew browser repos list format.
     """
-    return """1
-Open Shop Channel
-hbb1.oscwii.org
-/hbb/homebrew_browser/listv036.txt
-/hbb/
-CodeMii
-hbb2.oscwii.org
-/hbb/homebrew_browser/listv036.txt
-/hbb/
-Homebrew Channel Themes
-hbb3.oscwii.org
-/hbb/homebrew_browser/listv036.txt
-/hbb/"""
+    repos: [ReposModel] = ReposModel.query.all()
+
+    # Add our version, "1", to the response.
+    content = Normalize()
+    content.add_line("1")
+
+    for repo in repos:
+        # Repo's name
+        content.add_line(repo.name)
+        # Repo's host
+        content.add_line(repo.host)
+        # Repo's contents
+        content.add_line("/hbb/homebrew_browser/listv036.txt")
+        # Repo's subdirectory
+        content.add_line("/hbb/")
+
+    return content.response

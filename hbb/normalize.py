@@ -1,0 +1,16 @@
+class Normalize(object):
+    """Normalize ensures CRLF line endings are present on the response.
+
+    In the case of the Homebrew Browser, responses _must_ end with CRLF.
+    Otherwise, the browser will horribly fail parsing."""
+    response = ""
+
+    def add(self, string: str):
+        """Adds a value to the internal string, adding only a space after it.
+
+        This is useful for the Homebrew Browser, with multiple properties present on a line."""
+        self.response += string + " "
+
+    def add_line(self, string: str):
+        """Adds a value to the internal string, inserting a CRLF after it."""
+        self.response += string + "\r\n"
