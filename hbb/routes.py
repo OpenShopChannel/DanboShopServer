@@ -21,14 +21,35 @@ def apps_list():
 @hbb.route('/hbb/get_rating.php')
 def get_rating():
     """
-    Returns the rating of an app.
+    Returns the rating of an app for a user.
     """
     app_name = request.args.get("name")
     esid = request.args.get("esid")
-    return "2 5"
+    return "5"
 
 
 # Stub
+@hbb.route('/hbb/update_rating.php')
+def update_rating():
+    """
+    Updates the rating of an app for a user.
+    """
+    app_name = request.args.get("name")
+    esid = request.args.get("esid")
+    rating = request.args.get("rating")
+    return "5"
+
+
+# Stub
+@hbb.route('/hbb/hbb_download.php')
+def register_download():
+    """
+    Registers that an app was downloaded.
+    """
+    app_name = request.args.get("name")
+    return ""
+
+
 @hbb.route('/hbb/repo_list.txt')
 def repo_list():
     """
