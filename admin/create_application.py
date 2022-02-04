@@ -1,3 +1,4 @@
+import os
 import shutil
 import uuid
 import zipfile
@@ -94,13 +95,60 @@ def process_files(app: Dict) -> str:
     with zipfile.ZipFile(zip_path, "r") as extract:
         extract.extractall(extract_path)
 
+    # Determine size information.
+    zip_size = os.path.getsize(zip_path)
+
+    # Loop through all files in the directory.
+    # We consider extra directories those who are not apps/slug.
+    slug = app["internal_name"]
+    extracted_size = 0
+    extra_dirs = []
+
+    apps_dir = os.path.abspath(os.path.join(extract_path, "apps"))
+    slug_dir = os.path.abspath(os.path.join(extract_path, "apps", slug))
+
+    for current_path, folders, files in os.walk(extract_path):
+        for folder in folders:
+            current_folder = os.path.join(current_path, folder)
+            abs_path = os.path.abspath(current_folder)
+
+            # Check if we are in the slug directory.
+            if abs_path == apps_dir or abs_path == slug_dir:
+                continue
+
+            # Trim the leading extract dir for our extra dir's path.
+            extra_path = abs_path.replace(extract_path, "")
+            extra_dirs.append(extra_path)
+
+        for file in files:
+            # Add this file to the total extracted size.
+            current_file = os.path.join(current_path, file)
+            file_size = os.path.getsize(current_file)
+            extracted_size += file_size
+
+    if os.path.exists(os.path.join(slug_dir, "boot.dol")):
+        package_type = "dol"
+    elif os.path.exists(os.path.join(slug_dir, "boot.elf")):
+        package_type = "elf"
+    elif os.path.join(slug_dir, "theme.zip"):
+        package_type = "thm"
+    else:
+        print("Invalid package type!")
+        raise ValueError
+
+    # Copy the icon and meta files.
+    shutil.copy(os.path.join(slug_dir, "icon.png"), file_path(file_uuid, FileTypes.ICON))
+    shutil.copy(os.path.join(slug_dir, "meta.xml"), file_path(file_uuid, FileTypes.META))
+
     # Generate a file model after our obtained data.
     file_stats = FileStatsModel(
         id=file_uuid,
-        extracted_size=app["extracted"],
-        zip_size=app["zip_size"],
+        extracted_size=extracted_size,
+        zip_size=zip_size,
+        extra_dirs=extra_dirs,
         md5=md5,
-        sha256=sha256
+        sha256=sha256,
+        package_type=package_type
     )
 
     # Insert.

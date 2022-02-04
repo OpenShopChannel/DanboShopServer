@@ -10,17 +10,19 @@ class StorageTypes(Enum):
     ZIPPED = "zipped"
     UNZIPPED = "unzipped"
     ICONS = "icons"
+    METAS = "metas"
 
 
 class FileTypes(Enum):
     """Possible types for files downloaded or requested."""
     ZIP = "zip"
     ICON = "png"
+    META = "xml"
 
 
 def storage_dir(storage_type: StorageTypes) -> str:
     """Returns a path for a given subpath in the configured storage directory."""
-    return os.path.join(config.FILE_STORAGE_PATH, storage_type.value)
+    return os.path.abspath(os.path.join(config.FILE_STORAGE_PATH, storage_type.value))
 
 
 def storage_path(storage_type: StorageTypes, dir_name: str) -> str:
@@ -34,6 +36,8 @@ def storage_type_for_file(file_type: FileTypes) -> StorageTypes:
         storage_type = StorageTypes.ICONS
     elif file_type == FileTypes.ZIP:
         storage_type = StorageTypes.ZIPPED
+    elif file_type == FileTypes.META:
+        storage_type = StorageTypes.METAS
     else:
         raise ValueError
 

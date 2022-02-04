@@ -17,7 +17,7 @@ class AppsModel(db.Model):
     date_updated = db.Column(db.DateTime, default=datetime.utcnow)       # Date the application was updated
     rating = db.Column(db.Integer, default=0)                            # Rating of the application
     downloads = db.Column(db.Integer, default=0)                         # Number of downloads
-    category = db.Column(db.String, nullable=False)                      # Category of the application
+    category = db.Column(db.String, nullable=False, index=True)          # Category of the application
     version = db.Column(db.Integer, default=1)                           # Version of the application
     theme = db.Column(db.Boolean, default=False)                         # Theme of the application
     title_ids = relationship("TitleIDsModel", back_populates="application", uselist=False)
@@ -80,8 +80,10 @@ class FileStatsModel(db.Model):
     meta_data = relationship("MetadataModel", back_populates="file")
     extracted_size = db.Column(db.Integer, default=0)
     zip_size = db.Column(db.Integer, default=0)
+    extra_dirs = db.Column(db.ARRAY(db.String, dimensions=1), default=[])
     md5 = db.Column(db.String)
     sha256 = db.Column(db.String)
+    package_type = db.Column(db.String)
 
 
 class ReposModel(db.Model):
