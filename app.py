@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from hbb.routes import hbb
 from api.routes import api
 from admin.routes import admin
+from updater.routes import updater
 import config
 from utils import create_storage_dirs
 
@@ -16,6 +17,7 @@ app.secret_key = config.secret_key
 app.register_blueprint(hbb)
 app.register_blueprint(api)
 app.register_blueprint(admin)
+app.register_blueprint(updater)
 
 db.init_app(app)
 migrate = Migrate(app, db)

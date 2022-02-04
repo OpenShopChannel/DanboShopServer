@@ -1,0 +1,9 @@
+{
+  "Slug": "priiloader",
+  "Source": "github",
+  "VersionSource": "tag_name",
+  "VersionRegex": "\\d+\\.\\d+\\.\\d+",
+  "ZipRegex": "Priiloader.*\\.zip",
+  "Repository": "DacoTaco/priiloader",
+  "ForRepository": "primary"
+}
