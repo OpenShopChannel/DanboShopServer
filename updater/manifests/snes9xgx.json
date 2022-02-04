@@ -1,5 +1,4 @@
 {
-  "Slug": "snes9xgx",
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",

@@ -1,5 +1,4 @@
 {
-  "Slug": "not64",
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",

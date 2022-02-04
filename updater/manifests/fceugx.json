@@ -1,5 +1,4 @@
 {
-  "Slug": "fceugx",
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",

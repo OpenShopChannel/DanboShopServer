@@ -1,5 +1,4 @@
 {
-  "Slug": "vbagx",
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",

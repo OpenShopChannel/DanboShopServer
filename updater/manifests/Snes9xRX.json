@@ -1,5 +1,4 @@
 {
-  "Slug": "Snes9xRX",
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
