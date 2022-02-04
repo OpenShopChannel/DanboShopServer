@@ -18,7 +18,7 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "contributors": app.meta_data.contributors,
         "display_name": app.meta_data.display_name,
         "downloads": 0,
-        "extra_directories": [],
+        "extra_directories": app.meta_data.file.extra_dirs,
         "extracted": app.meta_data.file.extracted_size,
         "hashes": {
             "md5": app.meta_data.file.md5,
@@ -27,7 +27,7 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "icon_url": url_for(app, FileTypes.ICON),
         "internal_name": app.slug,
         "long_description": app.meta_data.long_description,
-        "package_type": "dol",
+        "package_type": app.meta_data.file.package_type,
         "rating": app.rating,
         "release_date": int(app.date_added.timestamp()),
         "short_description": app.meta_data.short_description,
