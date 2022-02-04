@@ -5,5 +5,10 @@
   "VersionRegex": ".*",
   "ZipRegex": "mupen64-.*\\.zip",
   "Repository": "extremscorner/not64",
-  "ForRepository": "primary"
+  "ForRepository": "primary",
+  "PostFetch": {
+    "delete": [
+      "not64.dol"
+    ]
+  }
 }

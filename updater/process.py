@@ -71,6 +71,16 @@ def update_app(slug):
                     # Delete zip file
                     os.remove(filename)
 
+                    # Run post fetch tasks
+                    if "PostFetch" in manifest:
+                        if "delete" in manifest["PostFetch"]:
+                            for file in manifest["PostFetch"]["delete"]:
+                                # check if is directory
+                                if os.path.isdir(os.path.join(tmpdir, file)):
+                                    shutil.rmtree(os.path.join(tmpdir, file))
+                                else:
+                                    os.remove(os.path.join(tmpdir, file))
+
                     # Find the 3 required files and verify they are all in the same directory.
                     # Note that we are ignoring the possibility that there are multiple dols and xmls,
                     # those will fail and return False. Should think out a solution for them later.
