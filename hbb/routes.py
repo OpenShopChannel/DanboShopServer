@@ -32,7 +32,7 @@ def apps_list():
             current_category = app.category
 
         # todo replace "59853 279424 dol" with correct values
-        content.add_line(f"{app.slug} {int(app.date_added.timestamp())} 59853 279424 dol {app.meta_data.file.zip_size} 0 0 ws  . .")
+        content.add_line(f"{app.slug} {int(app.date_added.timestamp())} 59853 279424 {app.meta_data.file.package_type} {app.meta_data.file.zip_size} 0 0 ws  . .")
         # Name
         content.add_line(app.meta_data.display_name)
         # Author
