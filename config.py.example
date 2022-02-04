@@ -2,3 +2,4 @@
 SQLALCHEMY_DATABASE_URI = ""
 secret_key = ""
 FILE_STORAGE_PATH = "./storage"
+GITHUB_ACCESS_TOKEN = ""

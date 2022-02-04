@@ -27,7 +27,7 @@ def check_for_update(slug):
         if manifest["Source"].lower() == "github":
             # Get json from url https://api.github.com/repos/DacoTaco/priiloader/releases/latest
             url = "https://api.github.com/repos/" + manifest["Repository"] + "/releases/latest"
-            latest_release = requests.get(url).json()
+            latest_release = requests.get(url, auth=('user', config.GITHUB_ACCESS_TOKEN)).json()
             if manifest["VersionSource"] == "tag_name":
                 latest_version = re.search(manifest["VersionRegex"], latest_release["tag_name"]).group(0)
                 if version.parse(latest_version) > version.parse(app.meta_data.display_version):
@@ -44,7 +44,7 @@ def update_app(slug):
 
         if manifest["Source"].lower() == "github":
             url = "https://api.github.com/repos/" + manifest["Repository"] + "/releases/latest"
-            latest_release = requests.get(url).json()
+            latest_release = requests.get(url, auth=('user', config.GITHUB_ACCESS_TOKEN)).json()
         else:
             logging.warning('Failed to update application ' + slug
                             + ", Unsupported source: " + manifest["Source"])
@@ -62,7 +62,7 @@ def update_app(slug):
                     filename = os.path.join(tmpdir, asset["name"])
 
                     with open(filename, "wb") as f:
-                        f.write(requests.get(url).content)
+                        f.write(requests.get(url, auth=('user', config.GITHUB_ACCESS_TOKEN)).content)
 
                     # Extract zip file
                     with zipfile.ZipFile(filename, "r") as zip_ref:
