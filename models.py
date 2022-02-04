@@ -91,4 +91,4 @@ class ReposModel(db.Model):
     application = relationship("AppsModel", back_populates="repo")
     description = db.Column(db.String)
     name = db.Column(db.String)
-    host = db.Column(db.String)
+    host = db.Column(db.String, index=True)

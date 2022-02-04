@@ -1,5 +1,4 @@
-from flask import Blueprint, Response, stream_with_context, request
-from pip._vendor import requests
+from flask import Blueprint, request, abort
 
 from hbb.normalize import Normalize
 from models import ReposModel, AppsModel
@@ -13,13 +12,17 @@ def apps_list():
     """
     Returns a list of all the apps in the homebrew browser list format.
     """
-    content = Normalize()
-    content.add_line("Homebrew 2092896 v0.3.9e | - Updated with latest libogc which should correct network issues some users are experiencing")
-
-    # currently uses primary until different hostnames are handled
+    # Look up the repo ID for the current host.
+    repo_id = get_repo_id()
 
     # order by category, so that all apps in the same category come one after the other
-    apps: [AppsModel] = AppsModel.query.where(AppsModel.repo_id == "primary").order_by(AppsModel.category).all()
+    apps: [AppsModel] = AppsModel.query.where(AppsModel.repo_id == repo_id) \
+        .order_by(AppsModel.category) \
+        .all()
+
+    # Formulate our response.
+    content = Normalize()
+    content.add_line("Homebrew 2092896 v0.3.9e | - Updated with latest libogc which should correct network issues some users are experiencing")
 
     current_category = apps[0].category
     for app in apps:
@@ -102,3 +105,13 @@ def repo_list():
         content.add_line("/hbb/")
 
     return content.response
+
+
+def get_repo_id() -> str:
+    """Returns the repository ID for the given hostname, Aborts with a 404 if not found."""
+    hostname = request.host
+    repo = ReposModel.query.where(ReposModel.host == hostname).limit(1).all()
+    if not repo:
+        abort(404)
+
+    return repo[0].id
