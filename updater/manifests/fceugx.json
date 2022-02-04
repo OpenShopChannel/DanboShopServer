@@ -1,0 +1,9 @@
+{
+  "Slug": "fceugx",
+  "Source": "github",
+  "VersionSource": "tag_name",
+  "VersionRegex": ".*",
+  "ZipRegex": "FCEUltraGX-.*\\.zip",
+  "Repository": "dborth/fceugx",
+  "ForRepository": "primary"
+}

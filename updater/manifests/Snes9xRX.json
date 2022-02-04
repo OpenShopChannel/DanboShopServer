@@ -1,0 +1,14 @@
+{
+  "Slug": "Snes9xRX",
+  "Source": "github",
+  "VersionSource": "tag_name",
+  "VersionRegex": ".*",
+  "ZipRegex": "Snes9xRX-.*\\.zip",
+  "Repository": "niuus/Snes9xRX",
+  "ForRepository": "primary",
+  "PostFetch": {
+    "delete": [
+      "readme_S9xRX.txt"
+    ]
+  }
+}

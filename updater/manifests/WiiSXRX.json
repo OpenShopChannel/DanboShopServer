@@ -1,0 +1,9 @@
+{
+  "Slug": "WiiSXRX",
+  "Source": "github",
+  "VersionSource": "tag_name",
+  "VersionRegex": ".*",
+  "ZipRegex": "WiiSXRX-.*\\.zip",
+  "Repository": "niuus/WiiSXRX",
+  "ForRepository": "primary"
+}
