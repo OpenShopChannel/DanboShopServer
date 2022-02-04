@@ -22,5 +22,6 @@ def update_all():
     """Update all outdated apps"""
     updated = {}
     for app in check_updates():
-        updated[app] = update_app(app)
+        if check_updates()[app]:
+            updated[app] = update_app(app)
     return updated
