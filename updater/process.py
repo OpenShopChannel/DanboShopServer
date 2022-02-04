@@ -83,7 +83,7 @@ def update_app(slug):
                         path = pathlib.Path(os.path.dirname(dol_path)).parent.parent
 
                         # Create zip file from directory
-                        with zipfile.ZipFile("prepared.zip", "w", zipfile.ZIP_DEFLATED) as zip_ref:
+                        with zipfile.ZipFile("temp.zip", "w", zipfile.ZIP_DEFLATED) as zip_ref:
                             for file in path.rglob("*"):
                                 relative_path = file.relative_to(path)
                                 zip_ref.write(file, arcname=relative_path)
@@ -100,9 +100,11 @@ def update_app(slug):
                         # Now, copy the new files
                         shutil.copy(icon_path, f"{config.FILE_STORAGE_PATH}/icons/{uuid}.png")
                         shutil.copy(meta_path, f"{config.FILE_STORAGE_PATH}/metas/{uuid}.xml")
-                        shutil.copy("prepared.zip", f"{config.FILE_STORAGE_PATH}/zipped/{uuid}.zip")
+                        shutil.copy("temp.zip", f"{config.FILE_STORAGE_PATH}/zipped/{uuid}.zip")
                         shutil.unpack_archive(f"{config.FILE_STORAGE_PATH}/zipped/{uuid}.zip",
                                               f"{config.FILE_STORAGE_PATH}/unzipped/{uuid}")
+
+                        os.remove("temp.zip")
 
                         # Update the app in the database
                         # important: todo update ALL information, and use version specified in meta.xml
