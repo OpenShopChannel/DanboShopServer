@@ -20,12 +20,12 @@ class FileTypes(Enum):
 
 def storage_dir(storage_type: StorageTypes) -> str:
     """Returns a path for a given subpath in the configured storage directory."""
-    return f"{config.FILE_STORAGE_PATH}/{storage_type.value}"
+    return os.path.join(config.FILE_STORAGE_PATH, storage_type.value)
 
 
 def storage_path(storage_type: StorageTypes, dir_name: str) -> str:
     """Returns a path for a directory within the given storage type."""
-    return f"{storage_dir(storage_type)}/{dir_name}"
+    return os.path.join(storage_dir(storage_type), dir_name)
 
 
 def storage_type_for_file(file_type: FileTypes) -> StorageTypes:
@@ -43,8 +43,9 @@ def storage_type_for_file(file_type: FileTypes) -> StorageTypes:
 def file_path(file_name: str, file_type: FileTypes) -> str:
     """Returns a path for a file type within the given storage type."""
     storage_type = storage_type_for_file(file_type)
+    full_file_name = file_name + "." + file_type.value
 
-    return storage_dir(storage_type) + "/" + file_name + "." + file_type.value
+    return os.path.join(storage_dir(storage_type), full_file_name)
 
 
 def create_storage_dirs():
