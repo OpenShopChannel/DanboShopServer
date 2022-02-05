@@ -2,7 +2,12 @@
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
-  "ZipRegex": "FCEUltraGX-.*\\.zip",
+  "AssetName": {
+    "Regex": "FCEUltraGX-.*\\.zip",
+    "BlockedStrings": [
+      "GameCube"
+    ]
+  },
   "Repository": "dborth/fceugx",
   "ForRepository": "primary"
 }

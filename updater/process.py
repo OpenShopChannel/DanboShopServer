@@ -50,10 +50,17 @@ def update_app(slug):
                             + ", Unsupported source: " + manifest["Source"])
             return False
 
+        # Remove blocked files from latest releases
+        if "BlockedStrings" in manifest["AssetName"]:
+            for asset in latest_release["assets"]:
+                for blocked_string in manifest["AssetName"]["BlockedStrings"]:
+                    if blocked_string in asset["name"]:
+                        latest_release["assets"].remove(asset)
+
         # Iterate files in GitHub release
         for asset in latest_release["assets"]:
             # Match against zip file regex from manifest
-            if re.search(manifest["ZipRegex"], asset["name"]):
+            if re.search(manifest["AssetName"]["Regex"], asset["name"]):
                 url = asset["browser_download_url"]
 
                 # create temp dir and download file

@@ -2,7 +2,12 @@
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
-  "ZipRegex": "Snes9xRX-.*\\.zip",
+  "AssetName": {
+    "Regex": "Snes9xRX-.*\\.zip",
+    "BlockedStrings": [
+      "GCN"
+    ]
+  },
   "Repository": "niuus/Snes9xRX",
   "ForRepository": "primary",
   "PostFetch": {

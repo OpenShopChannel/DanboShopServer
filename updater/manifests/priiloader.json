@@ -2,7 +2,9 @@
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
-  "ZipRegex": "Priiloader.*\\.zip",
+  "AssetName": {
+    "Regex": "Priiloader.*\\.zip"
+  },
   "Repository": "DacoTaco/priiloader",
   "ForRepository": "primary"
 }

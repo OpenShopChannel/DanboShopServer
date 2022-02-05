@@ -2,7 +2,9 @@
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
-  "ZipRegex": "WiiSXRX-.*\\.zip",
+  "AssetName": {
+    "Regex": "WiiSXRX-.*\\.zip"
+  },
   "Repository": "niuus/WiiSXRX",
   "ForRepository": "primary"
 }

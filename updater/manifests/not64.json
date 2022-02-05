@@ -2,7 +2,9 @@
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
-  "ZipRegex": "mupen64-.*\\.zip",
+  "AssetName": {
+    "Regex": "mupen64-.*\\.zip"
+  },
   "Repository": "extremscorner/not64",
   "ForRepository": "primary",
   "PostFetch": {

@@ -2,7 +2,12 @@
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
-  "ZipRegex": "VisualBoyAdvanceGX-.*\\.zip",
+  "AssetName": {
+    "Regex": "VisualBoyAdvanceGX-.*\\.zip",
+    "BlockedStrings": [
+      "GameCube"
+    ]
+  },
   "Repository": "dborth/vbagx",
   "ForRepository": "primary"
 }

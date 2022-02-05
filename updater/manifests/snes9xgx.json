@@ -2,7 +2,12 @@
   "Source": "github",
   "VersionSource": "tag_name",
   "VersionRegex": ".*",
-  "ZipRegex": "Snes9xGX-.*\\.zip",
+  "AssetName": {
+    "Regex": "Snes9xGX-.*\\.zip",
+    "BlockedStrings": [
+      "GameCube"
+    ]
+  },
   "Repository": "dborth/snes9xgx",
   "ForRepository": "primary"
 }
