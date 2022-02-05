@@ -20,7 +20,7 @@ class TitlesExhaustedError(Exception):
 
 def get_char(index: int) -> str:
     """Returns the character for the given index. If zero, assumes A."""
-    return CHAR_RANGE[index-1]
+    return CHAR_RANGE[index]
 
 
 def get_title_category(title_type: TitleType) -> str:
@@ -47,6 +47,9 @@ def generate_title_id(title_type: TitleType, amount: int) -> str:
 
     # Begin stringing a title ID.
     title_id: str = type_byte
+
+    # Our amount should be minus one so that 1 -> AAA.
+    amount -= 1
 
     # Ensure we are not exceeding our maximum amount.
     if amount > (RANGE_LENGTH ** 3):
