@@ -7,6 +7,7 @@ import zipfile
 import glob
 import pathlib
 import config
+import xml.etree.ElementTree as ET
 
 import requests
 from packaging import version
@@ -123,9 +124,16 @@ def update_app(slug):
 
                         os.remove("temp.zip")
 
-                        # Update the app in the database
+                        # Update the app's metadata in the database
                         # important: todo update ALL information, and use version specified in meta.xml
-                        app.meta_data.display_version = latest_release["tag_name"]
+
+                        with open(meta_path, "r") as f:
+                            meta_xml = f.read()
+                            meta_xml_root = ET.fromstring(meta_xml)
+                            app.meta_data.display_version = meta_xml_root.find("version").text
+                            app.meta_data.display_name = meta_xml_root.find("name").text
+                            app.meta_data.short_description = meta_xml_root.find("short_description").text
+                            app.meta_data.long_description = meta_xml_root.find("long_description").text
 
                         # Up internal version number
                         app.version += 1
