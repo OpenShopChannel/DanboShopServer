@@ -1,11 +1,10 @@
 import os
 import shutil
 import uuid
+import requests
 import zipfile
 from datetime import date
 from typing import Dict
-
-from pip._vendor import requests
 
 from models import AuthorModel, db, MetadataModel, FileStatsModel, AppsModel, TitleIDsModel
 from titles import get_title_id, TitleType
