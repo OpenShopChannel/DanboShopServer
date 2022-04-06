@@ -1,8 +1,9 @@
+import os
 from typing import Dict
 
 from api.apps import app_to_dict
 from models import AppsModel, AuthorModel, ReposModel
-from flask import Blueprint, abort, jsonify, request
+from flask import Blueprint, abort, jsonify, request, send_file
 
 api = Blueprint('api', __name__, template_folder='templates')
 
@@ -28,6 +29,16 @@ def retrieve_hosts():
         "repos": repo_names,
         "repositories": repositories,
     }
+
+
+@api.get("/<repo>/icons/<uuid>.png")
+def icon(repo, uuid):
+    filename = f"storage/icons/{uuid}.png"
+    if os.path.isfile(filename):
+        return send_file(filename, mimetype='image/png')
+
+    # fallback icon
+    return send_file("static/images/missing-app-icon.png", mimetype='image/gif')
 
 
 @api.get("/v2/<repo>/packages")
