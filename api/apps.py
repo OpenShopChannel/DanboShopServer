@@ -16,6 +16,7 @@ def app_to_dict(app: AppsModel) -> Dict[str, Union[str, int, list, dict]]:
         "category": app.category,
         "coder": app.author.display_name,
         "contributors": app.meta_data.contributors,
+        "controllers": app.meta_data.controllers,
         "display_name": app.meta_data.display_name,
         "downloads": 0,
         "extra_directories": app.meta_data.file.extra_dirs,
