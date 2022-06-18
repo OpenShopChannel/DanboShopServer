@@ -25,10 +25,10 @@ def retrieve_hosts():
             "name": repo.name,
         }
 
-    return {
+    return jsonify({
         "repos": repo_names,
         "repositories": repositories,
-    }
+    })
 
 
 @api.get("/<repo>/icons/<uuid>.png")
@@ -86,7 +86,7 @@ def retrieve_package(repo):
     # As we create a list, return the first item
     # should we desire a single package.
     if single_package:
-        return apps_list[0]
+        return jsonify(apps_list[0])
     else:
         return jsonify(apps_list)
 
