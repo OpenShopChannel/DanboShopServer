@@ -5,7 +5,7 @@ from api.apps import app_to_dict
 from models import AppsModel, AuthorModel, ReposModel
 from flask import Blueprint, abort, jsonify, request, send_file
 
-from utils import storage_path, StorageTypes
+from utils import file_path, FileTypes, slug_file_uuid
 
 api = Blueprint('api', __name__, template_folder='templates')
 
@@ -33,14 +33,32 @@ def retrieve_hosts():
     })
 
 
-@api.get("/<repo>/icon/<uuid>.png")
-def icon(repo, uuid):
-    filename = storage_path(StorageTypes.ICONS, f"{uuid}.png")
+@api.get("/<repo>/icon/<slug>.png")
+def slug_icon(repo, slug):
+    filename = slug_file_uuid(slug, FileTypes.ICON)
     if os.path.isfile(filename):
         return send_file(filename, mimetype='image/png')
 
     # fallback icon
-    return send_file("static/images/missing-app-icon.png", mimetype='image/gif')
+    return send_file("static/images/missing-app-icon.png", mimetype='image/png')
+
+
+@api.get("/<repo>/zip/<slug>.zip")
+def slug_zip(repo, slug):
+    filename = slug_file_uuid(slug, FileTypes.ZIP)
+    if os.path.isfile(filename):
+        return send_file(filename)
+    else:
+        abort(404)
+
+
+@api.get("/<repo>/meta/<slug>.xml")
+def slug_meta(repo, slug):
+    filename = slug_file_uuid(slug, FileTypes.META)
+    if os.path.isfile(filename):
+        return send_file(filename)
+    else:
+        abort(404)
 
 
 @api.get("/v2/<repo>/packages")

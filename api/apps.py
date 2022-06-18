@@ -53,6 +53,6 @@ def url_for(app: AppsModel, file_type: FileTypes) -> str:
 
     hostname = request.host
     repo = app.repo.id
-    uuid_name = app.meta_data.file_uuid
-    return f"https://{hostname}/{repo}/{storage_dir}/{uuid_name}.{extension}"
+    slug = app.slug
+    return f"https://{hostname}/{repo}/{storage_dir}/{slug}.{extension}"
 

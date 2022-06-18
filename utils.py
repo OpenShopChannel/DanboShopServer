@@ -1,8 +1,10 @@
 import hashlib
 import os
 from enum import Enum
+from typing import Optional
 
 import config
+from models import AppsModel, MetadataModel
 
 
 class StorageTypes(Enum):
@@ -75,3 +77,16 @@ def sha256sum_file(path: str) -> bytes:
         digest = hashlib.sha256(contents).digest()
 
     return digest
+
+
+def slug_file_uuid(slug: str, file_type: FileTypes) -> str:
+    """Resolves the file UUID of an application given its slug."""
+    app = MetadataModel.query\
+        .where(AppsModel.slug == slug)\
+        .where(AppsModel.id == MetadataModel.application_id)\
+        .first()
+    if not app:
+        # Return an invalid path.
+        return ""
+
+    return file_path(app.file_uuid, file_type)
