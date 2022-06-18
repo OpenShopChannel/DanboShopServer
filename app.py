@@ -12,6 +12,7 @@ from utils import create_storage_dirs
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.secret_key = config.secret_key
 
 app.register_blueprint(hbb)
