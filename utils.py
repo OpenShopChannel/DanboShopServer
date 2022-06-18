@@ -7,10 +7,10 @@ import config
 
 class StorageTypes(Enum):
     """Possible types for storage on disk."""
-    ZIPPED = "zipped"
+    ZIPPED = "zip"
     UNZIPPED = "unzipped"
-    ICONS = "icons"
-    METAS = "metas"
+    ICONS = "icon"
+    METAS = "meta"
 
 
 class FileTypes(Enum):

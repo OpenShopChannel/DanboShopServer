@@ -1,5 +1,7 @@
 from typing import Dict, Union
 
+from flask import request
+
 from models import AppsModel
 from utils import FileTypes, storage_type_for_file
 
@@ -49,7 +51,7 @@ def url_for(app: AppsModel, file_type: FileTypes) -> str:
     extension = file_type.value
     storage_dir = storage_type_for_file(file_type).value
 
-    hostname = app.repo.host
+    hostname = request.host
     repo = app.repo.id
     uuid_name = app.meta_data.file_uuid
     return f"https://{hostname}/{repo}/{storage_dir}/{uuid_name}.{extension}"

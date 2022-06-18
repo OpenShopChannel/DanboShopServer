@@ -5,6 +5,8 @@ from api.apps import app_to_dict
 from models import AppsModel, AuthorModel, ReposModel
 from flask import Blueprint, abort, jsonify, request, send_file
 
+from utils import storage_path, StorageTypes
+
 api = Blueprint('api', __name__, template_folder='templates')
 
 
@@ -33,7 +35,7 @@ def retrieve_hosts():
 
 @api.get("/<repo>/icons/<uuid>.png")
 def icon(repo, uuid):
-    filename = f"storage/icons/{uuid}.png"
+    filename = storage_path(StorageTypes.ICONS, f"{uuid}.png")
     if os.path.isfile(filename):
         return send_file(filename, mimetype='image/png')
 
