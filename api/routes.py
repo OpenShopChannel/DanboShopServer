@@ -33,7 +33,7 @@ def retrieve_hosts():
     })
 
 
-@api.get("/<repo>/icons/<uuid>.png")
+@api.get("/<repo>/icon/<uuid>.png")
 def icon(repo, uuid):
     filename = storage_path(StorageTypes.ICONS, f"{uuid}.png")
     if os.path.isfile(filename):
