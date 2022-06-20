@@ -1,7 +1,12 @@
-from flask import Blueprint, request, abort
+import zipfile
+from io import BytesIO
 
+from flask import Blueprint, request, abort, send_file
+
+from assets import serve_slug_file, serve_slug_icon
 from hbb.normalize import Normalize
 from models import ReposModel, AppsModel
+from utils import FileTypes, file_path
 
 hbb = Blueprint('hbb', __name__, template_folder='templates')
 
@@ -115,3 +120,43 @@ def get_repo_id() -> str:
         abort(404)
 
     return repo[0].id
+
+
+@hbb.route('/hbb/<slug>/<_slug>.zip')
+def hbb_zip(slug):
+    return serve_slug_file(slug, FileTypes.ZIP)
+
+
+@hbb.route('/hbb/<slug>/icon.png')
+@hbb.route('/hbb/<slug>.png')
+def hbb_icon(slug):
+    return serve_slug_icon(slug)
+
+
+@hbb.route('/hbb/<slug>/meta.xml')
+def hbb_meta(slug):
+    return serve_slug_file(slug, FileTypes.META)
+
+
+@hbb.route('/hbb/homebrew_browser/temp_files.zip')
+def hbb_icon_zip():
+    # TODO: This should be done upon catalogue update,
+    # instead of dynamically, to avoid server strain.
+    # For development purposes, we do not.
+
+    # Create a zip file within memory.
+    memory_buffer = BytesIO()
+    zip_file = zipfile.ZipFile(memory_buffer, 'w')
+
+    # Zip all icons within our icon directory.
+    repo: [AppsModel] = AppsModel.query.all()
+    for app in repo:
+        icon_path = file_path(app.meta_data.file_uuid, FileTypes.ICON)
+        file_name = f"{app.slug}.png"
+        zip_file.write(icon_path, arcname=file_name)
+
+    # Rewind to the start of the buffer so that it can be read in full.
+    zip_file.close()
+    memory_buffer.seek(0)
+
+    return send_file(memory_buffer, mimetype='application/zip')

@@ -1,7 +1,6 @@
 import hashlib
 import os
 from enum import Enum
-from typing import Optional
 
 import config
 from models import AppsModel, MetadataModel

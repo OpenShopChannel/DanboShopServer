@@ -1,11 +1,11 @@
-import os
 from typing import Dict
 
 from api.apps import app_to_dict
+from assets import serve_slug_file, serve_slug_icon
 from models import AppsModel, AuthorModel, ReposModel
 from flask import Blueprint, abort, jsonify, request, send_file
 
-from utils import file_path, FileTypes, slug_file_uuid
+from utils import FileTypes
 
 api = Blueprint('api', __name__, template_folder='templates')
 
@@ -35,30 +35,17 @@ def retrieve_hosts():
 
 @api.get("/<repo>/icon/<slug>.png")
 def slug_icon(repo, slug):
-    filename = slug_file_uuid(slug, FileTypes.ICON)
-    if os.path.isfile(filename):
-        return send_file(filename, mimetype='image/png')
-
-    # fallback icon
-    return send_file("static/images/missing-app-icon.png", mimetype='image/png')
+    return serve_slug_icon(slug)
 
 
 @api.get("/<repo>/zip/<slug>.zip")
 def slug_zip(repo, slug):
-    filename = slug_file_uuid(slug, FileTypes.ZIP)
-    if os.path.isfile(filename):
-        return send_file(filename)
-    else:
-        abort(404)
+    return serve_slug_file(slug, FileTypes.ZIP)
 
 
 @api.get("/<repo>/meta/<slug>.xml")
 def slug_meta(repo, slug):
-    filename = slug_file_uuid(slug, FileTypes.META)
-    if os.path.isfile(filename):
-        return send_file(filename)
-    else:
-        abort(404)
+    return serve_slug_file(slug, FileTypes.META)
 
 
 @api.get("/v2/<repo>/packages")
