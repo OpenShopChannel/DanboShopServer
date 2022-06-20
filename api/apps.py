@@ -54,5 +54,5 @@ def url_for(app: AppsModel, file_type: FileTypes) -> str:
     hostname = request.host
     repo = app.repo.id
     slug = app.slug
-    return f"https://{hostname}/{repo}/{storage_dir}/{slug}.{extension}"
+    return f"https://{hostname}/v2/{repo}/{storage_dir}/{slug}.{extension}"
 

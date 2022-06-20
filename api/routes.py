@@ -33,17 +33,17 @@ def retrieve_hosts():
     })
 
 
-@api.get("/<repo>/icon/<slug>.png")
+@api.get("/v2/<repo>/icon/<slug>.png")
 def slug_icon(repo, slug):
     return serve_slug_icon(slug)
 
 
-@api.get("/<repo>/zip/<slug>.zip")
+@api.get("/v2/<repo>/zip/<slug>.zip")
 def slug_zip(repo, slug):
     return serve_slug_file(slug, FileTypes.ZIP)
 
 
-@api.get("/<repo>/meta/<slug>.xml")
+@api.get("/v2/<repo>/meta/<slug>.xml")
 def slug_meta(repo, slug):
     return serve_slug_file(slug, FileTypes.META)
 
