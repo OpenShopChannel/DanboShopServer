@@ -36,8 +36,35 @@ def apps_list():
             content.add_line(f"={current_category.capitalize()}=")
             current_category = app.category
 
-        # todo replace "59853 279424 dol" with correct values
-        content.add_line(f"{app.slug} {int(app.date_added.timestamp())} 59853 279424 {app.meta_data.file.package_type} {app.meta_data.file.zip_size} 0 0 ws  . .")
+        # The following app metadata should all be on one line.
+        # -----
+        # Internal name
+        content.add(app.slug)
+        # Date added to repo
+        content.add(int(app.date_added.timestamp()))
+        # Size of icon.png
+        content.add(59853)
+        # Size of package
+        content.add(279424)
+        # Type of package (dol/elf/etc)
+        content.add(app.meta_data.file.package_type)
+        # Size of total zip
+        content.add(app.meta_data.file.zip_size)
+        # Download count
+        # TODO: support download count
+        content.add(0)
+        # Ratings count
+        content.add(0)
+        # Controllers
+        content.add(app.meta_data.controllers)
+        # Folders to create
+        content.add("")
+        # Folders to not delete
+        content.add(".")
+        # Files to not extract
+        content.add_line(".")
+        # -----
+
         # Name
         content.add_line(app.meta_data.display_name)
         # Author

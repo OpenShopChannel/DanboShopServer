@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+from typing import Union
+
+
 class Normalize(object):
     """Normalize ensures CRLF line endings are present on the response.
 
@@ -5,10 +10,13 @@ class Normalize(object):
     Otherwise, the browser will horribly fail parsing."""
     response = ""
 
-    def add(self, string: str):
+    def add(self, string: Union[int | str]):
         """Adds a value to the internal string, adding only a space after it.
 
         This is useful for the Homebrew Browser, with multiple properties present on a line."""
+        if type(string) == int:
+            string = f"{string}"
+
         self.response += string + " "
 
     def add_line(self, string: str):
