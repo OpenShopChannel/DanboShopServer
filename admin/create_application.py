@@ -127,15 +127,19 @@ def process_files(app: Dict) -> str:
 
     if os.path.exists(os.path.join(slug_dir, "boot.dol")):
         package_type = "dol"
+        package_size = os.path.getsize(os.path.join(slug_dir, "boot.dol"))
     elif os.path.exists(os.path.join(slug_dir, "boot.elf")):
         package_type = "elf"
+        package_size = os.path.getsize(os.path.join(slug_dir, "boot.elf"))
     elif os.path.join(slug_dir, "theme.zip"):
         package_type = "thm"
+        package_size = os.path.getsize(os.path.join(slug_dir, "theme.zip"))
     else:
         print("Invalid package type!")
         raise ValueError
 
     # Copy the icon and meta files.
+    icon_size = os.path.getsize(os.path.join(slug_dir, "icon.png"))
     shutil.copy(os.path.join(slug_dir, "icon.png"), file_path(file_uuid, FileTypes.ICON))
     shutil.copy(os.path.join(slug_dir, "meta.xml"), file_path(file_uuid, FileTypes.META))
 
@@ -144,10 +148,12 @@ def process_files(app: Dict) -> str:
         id=file_uuid,
         extracted_size=extracted_size,
         zip_size=zip_size,
+        icon_size=icon_size,
         extra_dirs=extra_dirs,
         md5=md5,
         sha256=sha256,
-        package_type=package_type
+        package_type=package_type,
+        package_size=package_size
     )
 
     # Insert.

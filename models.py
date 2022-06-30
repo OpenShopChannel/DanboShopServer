@@ -78,12 +78,14 @@ class FileStatsModel(db.Model):
 
     id = db.Column(db.String, primary_key=True)
     meta_data = relationship("MetadataModel", back_populates="file")
+    icon_size = db.Column(db.Integer, default=0)
     extracted_size = db.Column(db.Integer, default=0)
     zip_size = db.Column(db.Integer, default=0)
     extra_dirs = db.Column(db.ARRAY(db.String, dimensions=1), default=[])
     md5 = db.Column(db.String)
     sha256 = db.Column(db.String)
     package_type = db.Column(db.String)
+    package_size = db.Column(db.Integer, default=0)
 
 
 class ReposModel(db.Model):

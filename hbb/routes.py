@@ -43,9 +43,9 @@ def apps_list():
         # Date added to repo
         content.add(int(app.date_added.timestamp()))
         # Size of icon.png
-        content.add(59853)
+        content.add(app.meta_data.file.icon_size)
         # Size of package
-        content.add(279424)
+        content.add(app.meta_data.file.package_size)
         # Type of package (dol/elf/etc)
         content.add(app.meta_data.file.package_type)
         # Size of total zip
