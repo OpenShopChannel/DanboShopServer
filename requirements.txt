@@ -1,7 +1,7 @@
-Flask~=2.0.2
+Flask~=2.1.0
 Flask-Migrate~=3.1.0
-SQLAlchemy~=1.4.29
+SQLAlchemy~=1.4.39
 Flask-SQLAlchemy~=2.5.1
 psycopg2~=2.9.3
-requests~=2.27.1
+requests~=2.28.1
 packaging~=21.3
